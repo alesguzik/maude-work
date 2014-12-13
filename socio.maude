@@ -1,0 +1,22 @@
+fmod SOCIO is
+    sorts Axis Aspect Function IE NS TF PJ Tim .
+    subsorts IE NS TF PJ < Axis .
+    ops introverted extraverted : -> IE [ ctor] . var IE1 : IE .
+    ops intuition sensing       : -> NS [ ctor] . var NS1 : NS .
+    ops thinking feeling        : -> TF [ ctor] . var TF1 : TF .
+    ops percieving judging      : -> PJ [ ctor] . var PJ1 : PJ .
+
+    op tim : IE NS TF PJ -> Tim .
+    vars T1 T2 : Tim .
+
+    subsorts NS TF < Aspect .
+
+    op __ : IE Aspect -> Function .
+    vars F1 F2 : Function .
+
+    ops primary_function secondary_function : Tim -> Function .
+    eq primary_function(tim(IE1, NS1, TF1, PJ1)) = IE1 if (PJ1 == percieving) then (NS1) else (TF1) fi .
+
+    sort Relationship .
+    op _with_ : Tim Tim -> Relationship .
+endfm
