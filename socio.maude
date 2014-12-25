@@ -1,53 +1,93 @@
-fmod SOCIO is
-    sorts Axis Aspect Function IE NS TF PJ Tim .
+fmod SOCIO-BASE is
+    sorts Axis IE NS TF PJ Tim .
     subsorts IE NS TF PJ < Axis .
-    ops introverted extraverted : -> IE [ctor] . var IE1 : IE .
-    ops intuition sensing       : -> NS [ctor] . var NS1 : NS .
-    ops thinking feeling        : -> TF [ctor] . var TF1 : TF .
-    ops percieving judging      : -> PJ [ctor] . var PJ1 : PJ .
+    ops introverted extraverted : -> IE [ctor] .
+    ops intuition sensing       : -> NS [ctor] .
+    ops thinking feeling        : -> TF [ctor] .
+    ops percieving judging      : -> PJ [ctor] .
+    ops i e n s t f p j : -> Axis .
+    op tim : IE NS TF PJ -> Tim .
     op invert : Axis -> Axis .
+    ops don duma gugo rob gam maks zhuk es nap bal jack drai shtir dost gek gab : -> Tim .
+
+    eq i = introverted . eq e = extraverted .
+    eq n = intuition   . eq s = sensing .
+    eq t = thinking    . eq f = feeling .
+    eq p = percieving  . eq j = judging .
+
     eq invert(introverted) = extraverted .
     eq invert(extraverted) = introverted .
-    eq invert(intuition) = sensing .
-    eq invert(sensing) = intuition .
-    eq invert(thinking) = feeling .
-    eq invert(feeling) = thinking .
-    eq invert(percieving) = judging .
-    eq invert(judging) = percieving .
+    eq invert(intuition)   = sensing .
+    eq invert(sensing)     = intuition .
+    eq invert(thinking)    = feeling .
+    eq invert(feeling)     = thinking .
+    eq invert(percieving)  = judging .
+    eq invert(judging)     = percieving .
 
-    op tim : IE NS TF PJ -> Tim .
-    vars T1 T2 : Tim .
+    eq don   = tim(e,n,t,p) .
+    eq duma  = tim(i,s,f,p) .
+    eq gugo  = tim(e,s,f,j) .
+    eq rob   = tim(i,n,t,j) .
+    eq gam   = tim(e,n,f,j) .
+    eq maks  = tim(i,s,t,j) .
+    eq zhuk  = tim(e,s,t,p) .
+    eq es    = tim(i,n,f,p) .
+    eq nap   = tim(e,s,f,p) .
+    eq bal   = tim(i,n,t,p) .
+    eq jack  = tim(e,n,t,j) .
+    eq drai  = tim(i,s,f,j) .
+    eq shtir = tim(e,s,t,j) .
+    eq dost  = tim(i,n,f,j) .
+    eq gek   = tim(e,n,f,p) .
+    eq gab   = tim(i,s,t,p) .
+endfm
 
-    op don   : -> Tim .    eq don   = tim(extraverted, intuition, thinking, percieving) .
-    op duma  : -> Tim .    eq duma  = tim(introverted, sensing, feeling, percieving) .
-    op gugo  : -> Tim .    eq gugo  = tim(extraverted, sensing, feeling, judging) .
-    op rob   : -> Tim .    eq rob   = tim(introverted, intuition, thinking, judging) .
-
-    op gam   : -> Tim .    eq gam   = tim(extraverted, intuition, feeling, judging) .
-    op maks  : -> Tim .    eq maks  = tim(introverted, sensing, thinking, judging) .
-    op zhuk  : -> Tim .    eq zhuk  = tim(extraverted, sensing, thinking, percieving) .
-    op es    : -> Tim .    eq es    = tim(introverted, intuition, feeling, percieving) .
-
-    op nap   : -> Tim .    eq nap   = tim(extraverted, sensing, feeling, percieving) .
-    op bal   : -> Tim .    eq bal   = tim(introverted, intuition, thinking, percieving) .
-    op jack  : -> Tim .    eq jack  = tim(extraverted, intuition, thinking, judging) .
-    op drai  : -> Tim .    eq drai  = tim(introverted, sensing, feeling, judging) .
-
-    op shtir : -> Tim .    eq shtir = tim(extraverted, sensing, thinking, judging) .
-    op dost  : -> Tim .    eq dost  = tim(introverted, intuition, feeling, judging) .
-    op gek   : -> Tim .    eq gek   = tim(extraverted, intuition, feeling, percieving) .
-    op gab   : -> Tim .    eq gab   = tim(introverted, sensing, thinking, percieving) .
-
+fmod SOCIO-MODEL-A is
+    protecting SOCIO-BASE .
+    sorts Aspect Function .
     subsorts NS TF < Aspect .
-    vars A_NS A_TF : Aspect .
-
     op __ : IE Aspect -> Function .
-    vars F1 F2 : Function .
+    ops f1 f2 f3 f4 f5 f6 f7 f8 : Tim -> Function .
 
-    ops primary_function secondary_function : Tim -> Function .
-    eq   primary_function(tim(IE1, NS1, TF1, PJ1)) = IE1 (if (PJ1 == percieving) then (NS1) else (TF1) fi) .
-    eq secondary_function(tim(IE1, NS1, TF1, PJ1)) = invert(IE1) (if (PJ1 == percieving) then (TF1) else (NS1) fi) .
+    var IE : IE . var NS : NS . var TF : TF . var PJ : PJ .
+    vars A : Aspect .
+    vars T : Tim .
 
+    eq f1(tim(IE, NS, TF, percieving)) = IE NS .
+    eq f1(tim(IE, NS, TF, judging   )) = IE TF .
+    eq f2(tim(IE, NS, TF, percieving)) = invert(IE) TF .
+    eq f2(tim(IE, NS, TF, judging   )) = invert(IE) NS .
+
+    ceq f3(T) = IE invert(A) if IE A := f1(T) .
+    ceq f4(T) = IE invert(A) if IE A := f2(T) .
+    ceq f5(T) = invert(IE) invert(A) if IE A := f1(T) .
+    ceq f6(T) = invert(IE) invert(A) if IE A := f2(T) .
+    ceq f7(T) = invert(IE) A if IE A := f1(T) .
+    ceq f8(T) = invert(IE) A if IE A := f2(T) .
+endfm
+
+fmod SOCIO-MODEL-A-RELS is
+    protecting SOCIO-MODEL-A .
     sort Relationship .
     op _with_ : Tim Tim -> Relationship .
+    ops tozhd dual zerkal activ >zakaz> >revision> del mirazh superego pp quasitozhd conflict <zakaz< <revision< rodstv poludual : -> Relationship [ctor] .
+
+    vars T1 T2 : Tim .
+
+    ceq T1 with T2 = tozhd      if f1(T1) == f1(T2) and f2(T1) == f2(T2) .
+    ceq T1 with T2 = dual       if f1(T1) == f5(T2) and f2(T1) == f6(T2) .
+    ceq T1 with T2 = zerkal     if f1(T1) == f2(T2) and f2(T1) == f1(T2) .
+    ceq T1 with T2 = activ      if f1(T1) == f6(T2) and f2(T1) == f5(T2) .
+    ceq T1 with T2 = >zakaz>    if f1(T1) == f8(T2) and f2(T1) == f5(T2) .
+    ceq T1 with T2 = >revision> if f1(T1) == f4(T2) and f2(T1) == f1(T2) .
+    ceq T1 with T2 = del        if f1(T1) == f3(T2) and f2(T1) == f2(T2) .
+    ceq T1 with T2 = mirazh     if f1(T1) == f7(T2) and f2(T1) == f6(T2) .
+    ceq T1 with T2 = superego   if f1(T1) == f3(T2) and f2(T1) == f4(T2) .
+    ceq T1 with T2 = pp         if f1(T1) == f7(T2) and f2(T1) == f8(T2) .
+    ceq T1 with T2 = quasitozhd if f1(T1) == f8(T2) and f2(T1) == f7(T2) .
+    ceq T1 with T2 = conflict   if f1(T1) == f4(T2) and f2(T1) == f3(T2) .
+    ceq T1 with T2 = <revision< if f1(T1) == f2(T2) and f2(T1) == f3(T2) .
+    ceq T1 with T2 = <zakaz<    if f1(T1) == f6(T2) and f2(T1) == f7(T2) .
+    ceq T1 with T2 = rodstv     if f1(T1) == f1(T2) and f2(T1) == f4(T2) .
+    ceq T1 with T2 = poludual   if f1(T1) == f5(T2) and f2(T1) == f8(T2) .
 endfm
