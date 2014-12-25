@@ -1,21 +1,52 @@
 fmod SOCIO is
     sorts Axis Aspect Function IE NS TF PJ Tim .
     subsorts IE NS TF PJ < Axis .
-    ops introverted extraverted : -> IE [ ctor] . var IE1 : IE .
-    ops intuition sensing       : -> NS [ ctor] . var NS1 : NS .
-    ops thinking feeling        : -> TF [ ctor] . var TF1 : TF .
-    ops percieving judging      : -> PJ [ ctor] . var PJ1 : PJ .
+    ops introverted extraverted : -> IE [ctor] . var IE1 : IE .
+    ops intuition sensing       : -> NS [ctor] . var NS1 : NS .
+    ops thinking feeling        : -> TF [ctor] . var TF1 : TF .
+    ops percieving judging      : -> PJ [ctor] . var PJ1 : PJ .
+    op invert : Axis -> Axis .
+    eq invert(introverted) = extraverted .
+    eq invert(extraverted) = introverted .
+    eq invert(intuition) = sensing .
+    eq invert(sensing) = intuition .
+    eq invert(thinking) = feeling .
+    eq invert(feeling) = thinking .
+    eq invert(percieving) = judging .
+    eq invert(judging) = percieving .
 
     op tim : IE NS TF PJ -> Tim .
     vars T1 T2 : Tim .
 
+    op don   : -> Tim .    eq don   = tim(extraverted, intuition, thinking, percieving) .
+    op duma  : -> Tim .    eq duma  = tim(introverted, sensing, feeling, percieving) .
+    op gugo  : -> Tim .    eq gugo  = tim(extraverted, sensing, feeling, judging) .
+    op rob   : -> Tim .    eq rob   = tim(introverted, intuition, thinking, judging) .
+
+    op gam   : -> Tim .    eq gam   = tim(extraverted, intuition, feeling, judging) .
+    op maks  : -> Tim .    eq maks  = tim(introverted, sensing, thinking, judging) .
+    op zhuk  : -> Tim .    eq zhuk  = tim(extraverted, sensing, thinking, percieving) .
+    op es    : -> Tim .    eq es    = tim(introverted, intuition, feeling, percieving) .
+
+    op nap   : -> Tim .    eq nap   = tim(extraverted, sensing, feeling, percieving) .
+    op bal   : -> Tim .    eq bal   = tim(introverted, intuition, thinking, percieving) .
+    op jack  : -> Tim .    eq jack  = tim(extraverted, intuition, thinking, judging) .
+    op drai  : -> Tim .    eq drai  = tim(introverted, sensing, feeling, judging) .
+
+    op shtir : -> Tim .    eq shtir = tim(extraverted, sensing, thinking, judging) .
+    op dost  : -> Tim .    eq dost  = tim(introverted, intuition, feeling, judging) .
+    op gek   : -> Tim .    eq gek   = tim(extraverted, intuition, feeling, percieving) .
+    op gab   : -> Tim .    eq gab   = tim(introverted, sensing, thinking, percieving) .
+
     subsorts NS TF < Aspect .
+    vars A_NS A_TF : Aspect .
 
     op __ : IE Aspect -> Function .
     vars F1 F2 : Function .
 
     ops primary_function secondary_function : Tim -> Function .
-    eq primary_function(tim(IE1, NS1, TF1, PJ1)) = IE1 if (PJ1 == percieving) then (NS1) else (TF1) fi .
+    eq   primary_function(tim(IE1, NS1, TF1, PJ1)) = IE1 (if (PJ1 == percieving) then (NS1) else (TF1) fi) .
+    eq secondary_function(tim(IE1, NS1, TF1, PJ1)) = invert(IE1) (if (PJ1 == percieving) then (TF1) else (NS1) fi) .
 
     sort Relationship .
     op _with_ : Tim Tim -> Relationship .
